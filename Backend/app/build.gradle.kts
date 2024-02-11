@@ -18,7 +18,7 @@ dependencies {
     
     implementation ("org.slf4j:slf4j-simple:2.0.9")
     
-     providedCompile("jakarta.servlet:jakarta.servlet-api:6.0.0")
+    implementation ("jakarta.servlet:jakarta.servlet-api:6.0.0")
     
     implementation ("jakarta.json.bind:jakarta.json.bind-api:3.0.0")
     

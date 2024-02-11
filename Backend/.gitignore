@@ -1,3 +1,12 @@
-.gradle/
-*.properties
+# ビルド時に生成されるディレクトリ
 build/
+bin/
+
+# Gradleのビルドキャッシュ
+.gradle/
+
+# IDEの設定ファイル
+app/.settings/
+
+# 環境変数
+*.properties
