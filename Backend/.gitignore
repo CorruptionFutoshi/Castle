@@ -5,3 +5,7 @@ target/
 *.properties
 .metadata/
 Servers/
+.gradle/
+.settings/
+*.properties
+build/
