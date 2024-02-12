@@ -7,6 +7,8 @@ bin/
 
 # IDEの設定ファイル
 app/.settings/
+.settings/
+.project
 
 # 環境変数
-*.properties
+database.properties
