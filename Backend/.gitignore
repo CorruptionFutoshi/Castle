@@ -9,6 +9,7 @@ bin/
 app/.settings/
 .settings/
 .project
+.classpath
 
 # 環境変数
 database.properties
