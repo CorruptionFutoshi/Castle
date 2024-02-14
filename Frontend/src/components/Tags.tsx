@@ -5,7 +5,7 @@ export const Tags: FC = () => {
   const [tags, setTags] = useState<string[]>([]);
 
   useEffect(() => {
-    fetch("http://localhost:8080/articles/tags", { method: "GET" })
+    fetch("http://localhost:8080/app/article/tags", { method: "GET" })
       .then((res) => res.json())
       .then((tags: string[]) => setTags(tags.filter(tag => tag !== "ブログ")))
       .catch((error) => console.error('Error:', error)

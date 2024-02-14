@@ -20,7 +20,7 @@ export const ArticlesBySearch: FC = () => {
     const { searchText } = useParams<{ searchText: string }>();
 
     useEffect(() => {
-        fetch(`http://localhost:8080/articles/search/${searchText}`, { method: "GET" })
+        fetch(`http://localhost:8080/app/article/search/${searchText}`, { method: "GET" })
             .then((res) => res.json())
             .then((articles: Article[]) => setArticles(articles.filter(article => article.id !== 1).reverse()))
             .catch((error) => console.error('Error:', error)

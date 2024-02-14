@@ -15,7 +15,7 @@ export const Article: FC = () => {
     const { id } = useParams<{ id: string }>();
 
     useEffect(() => {
-        fetch(`http://localhost:8080/articles/${id}`, { method: "GET" })
+        fetch(`http://localhost:8080/app/article/articles/${id}`, { method: "GET" })
             .then((res) => res.json())
             .then((article: Article) => {
                 article.contents = article.contents.replace(/\\n/g, '<br />');

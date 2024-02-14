@@ -20,7 +20,7 @@ export const ArticlesByTag: FC = () => {
     const { tag } = useParams<{ tag: string }>();
 
     useEffect(() => {
-        fetch(`http://localhost:8080/articles/tag/${tag}`, { method: "GET" })
+        fetch(`http://localhost:8080/app/article/articles/${tag}`, { method: "GET" })
             .then((res) => res.json())
             .then((articles: Article[]) => setArticles(articles.filter(article => article.id !== 1).reverse()))
             .catch((error) => console.error('Error:', error)

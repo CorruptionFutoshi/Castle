@@ -15,7 +15,7 @@ export const App = () => {
   const [articles, setArticles] = useState<Article[]>([]);
 
   useEffect(() => {
-    fetch("http://localhost:8080/articles/home", { method: "GET" })
+    fetch("http://localhost:8080/app/article/articles/", { method: "GET" })
       .then((res) => res.json())
       .then((articles: Article[]) => setArticles(articles.filter(article => article.id !== 1).reverse()))
       .catch((error) => console.error('Error:', error)
