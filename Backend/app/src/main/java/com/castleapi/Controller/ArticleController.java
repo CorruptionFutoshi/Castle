@@ -31,10 +31,6 @@ public class ArticleController extends HttpServlet {
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse res) {
-		res.setHeader("Access-Control-Allow-Origin", "*");
-		res.setHeader("Access-Control-Allow-Methods", "GET, OPTIONS");
-		res.setHeader("Access-Control-Allow-Headers", "Content-Type");
-
 		String path = req.getRequestURI().substring("/app/article/".length());
 
 		if (path.startsWith("articles/")) {
