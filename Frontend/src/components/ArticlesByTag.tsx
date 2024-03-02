@@ -15,7 +15,7 @@ interface ParamTypes {
     tag: string;
 }
 
-export const ArticlesByTag: FC = () => {
+export const ArticlesByTag = () => {
     const [articles, setArticles] = useState<Article[]>([]);
     const { tag } = useParams<{ tag: string }>();
 

@@ -5,7 +5,7 @@ interface Article {
     [key: string]: any;
 }
 
-export const About: FC = () => {
+export const About = () => {
     const [article, setArticle] = useState<Article | null>(null);
 
     useEffect(() => {

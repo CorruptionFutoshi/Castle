@@ -10,7 +10,7 @@ interface Article {
     [key: string]: any;
 }
 
-export const Article: FC = () => {
+export const Article = () => {
     const [article, setArticle] = useState<Article | null>(null);
     const { id } = useParams<{ id: string }>();
 

@@ -15,7 +15,7 @@ interface ParamTypes {
     searchText: string;
 }
 
-export const ArticlesBySearch: FC = () => {
+export const ArticlesBySearch = () => {
     const [articles, setArticles] = useState<Article[]>([]);
     const { searchText } = useParams<{ searchText: string }>();
 

@@ -95,6 +95,15 @@ nav a {
     background-color: var(--white-color);
 }
 
+#signoutButton, #cancelMemberButton{
+    font-size: var(--font-size-large);
+    margin-left: 40px;
+    color: var(--black-color);
+    text-decoration: none;
+    border: none;
+    background-color: #fef4f4;
+}
+
 .header-search-icon {
     width: 35px;
 }
@@ -103,4 +112,49 @@ nav a {
     position: absolute;
     top: 25px;
     right: 500px;
+}
+
+
+#signinup-container {
+    width: 300px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+#signinup-title {
+    text-align: center;
+    color: #333;
+}
+
+#signinup-username, #signinup-password {
+    width: 90%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+#signinup-button {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    background-color: #007BFF;
+    color: white;
+    cursor: pointer;
+}
+
+#signinup-button:hover {
+    background-color: #0056b3;
+}
+
+#signinup-error {
+    color: red;
+}
+
+#confirmDialog{
+   text-align: center;
 }

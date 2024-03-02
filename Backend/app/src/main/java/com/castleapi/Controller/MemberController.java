@@ -37,6 +37,17 @@ public class MemberController extends HttpServlet {
 	}
 
 	@Override
+	protected void doGet(HttpServletRequest req, HttpServletResponse res) {
+		String path = req.getRequestURI().substring("/app/member/".length());
+
+		if (path.equals("signin/success")) {
+			handleSigninSuccess(req, res);
+		} else if (path.equals("signout/disposecookie")) {
+			disposeCookie(req, res);
+		}
+	}
+
+	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse res) {
 		String path = req.getRequestURI().substring("/app/member/".length());
 
@@ -96,20 +107,16 @@ public class MemberController extends HttpServlet {
 
 		if (member != null && Arrays.equals(hashPassword(password), member.getHashedPassword())) {
 			String sessionId = UUID.randomUUID().toString();
-			Cookie sessionCookie = new Cookie("session", sessionId);
-			sessionCookie.setMaxAge(60 * 60);
-			sessionCookie.setPath("/");
-			res.addCookie(sessionCookie);
 
 			try (JedisPool pool = new JedisPool("localhost", 6379);
 					Jedis jedis = pool.getResource();) {
 				jedis.setex(sessionId, 60 * 60, username);
 			}
 
-			res.setStatus(HttpServletResponse.SC_OK);
+			String redirectUrl = "/app/member/signin/success?session=" + sessionId;
 
 			try {
-				res.getWriter().write("Signin successful");
+				res.sendRedirect(redirectUrl);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -122,6 +129,25 @@ public class MemberController extends HttpServlet {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+		}
+	}
+
+	private void handleSigninSuccess(HttpServletRequest req, HttpServletResponse res) {
+		String sessionId = req.getParameter("session");
+
+		Cookie sessionCookie = new Cookie("session", sessionId);
+		sessionCookie.setMaxAge(60 * 60);
+		sessionCookie.setPath("/");
+		sessionCookie.setSecure(false);
+		sessionCookie.setAttribute("SameSite", "Lax");
+		res.addCookie(sessionCookie);
+
+		res.setStatus(HttpServletResponse.SC_OK);
+
+		try {
+			res.getWriter().write("Signin successful");
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -140,6 +166,7 @@ public class MemberController extends HttpServlet {
 
 		if (sessionId == null) {
 			res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+
 			try {
 				res.getWriter().write("Not signed in");
 			} catch (IOException e) {
@@ -153,13 +180,26 @@ public class MemberController extends HttpServlet {
 			jedis.del(sessionId);
 		}
 
-		Cookie sessionCookie = new Cookie("session", "");
-		sessionCookie.setMaxAge(0);
-		sessionCookie.setPath("/");
-		res.addCookie(sessionCookie);
+		res.setStatus(HttpServletResponse.SC_OK);
 
 		try {
 			res.getWriter().write("Signout successful");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void disposeCookie(HttpServletRequest req, HttpServletResponse res) {
+		Cookie sessionCookie = new Cookie("session", "");
+		sessionCookie.setMaxAge(0);
+		sessionCookie.setPath("/");
+		sessionCookie.setSecure(false);
+		sessionCookie.setAttribute("SameSite", "Lax");
+		res.addCookie(sessionCookie);
+		res.setStatus(HttpServletResponse.SC_OK);
+
+		try {
+			res.getWriter().write("Cookiedisposal successful");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -195,11 +235,6 @@ public class MemberController extends HttpServlet {
 			jedis.del(sessionId);
 		}
 
-		Cookie sessionCookie = new Cookie("session", "");
-		sessionCookie.setMaxAge(0);
-		sessionCookie.setPath("/");
-		res.addCookie(sessionCookie);
-
 		try {
 			memberDataAccess.deleteByUsername(username);
 			res.setStatus(HttpServletResponse.SC_OK);
@@ -223,7 +258,7 @@ public class MemberController extends HttpServlet {
 		StringBuilder stringBuilder = new StringBuilder();
 		String line;
 		BufferedReader reader = req.getReader();
-		
+
 		while ((line = reader.readLine()) != null) {
 			stringBuilder.append(line);
 		}
