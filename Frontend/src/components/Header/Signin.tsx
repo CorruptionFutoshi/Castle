@@ -1,11 +1,18 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { LoginContext } from "../../index";
 
 export const Signin = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const navigate = useNavigate();
+    const loginContext = useContext(LoginContext);
+    let setHasSessionId: React.Dispatch<React.SetStateAction<boolean>>;
+
+    if (loginContext) {
+        ({ setHasSessionId } = loginContext);
+    }
 
     const handleLogin = async () => {
         try {
@@ -23,6 +30,7 @@ export const Signin = () => {
 
             if (response.status === 200) {
                 alert('ログインに成功しました');
+                setHasSessionId(true);
                 navigate(`/`);
             } else {
                 setError('ユーザーネーム又はパスワードが間違っています');

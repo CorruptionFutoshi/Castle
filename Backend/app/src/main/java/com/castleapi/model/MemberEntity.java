@@ -11,11 +11,11 @@ public class MemberEntity {
 	
 	private byte[] hashedPassword;
 
-	public MemberEntity(int id, Date createDate, String userId, byte[] hashedPassword) {
+	public MemberEntity(int id, Date createDate, String username, byte[] hashedPassword) {
 		super();
 		this.id = id;
 		this.createDate = createDate;
-		this.username = userId;
+		this.username = username;
 		this.hashedPassword = hashedPassword;
 	}
 
@@ -31,7 +31,13 @@ public class MemberEntity {
 		return username;
 	}
 
+	public String getUsername() {
+		return username;
+	}
+
 	public byte[] getHashedPassword() {
 		return hashedPassword;
 	}
+	
 }
+

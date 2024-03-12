@@ -59,14 +59,13 @@ public class ArticleDataAccess {
 						searchId);
 				ResultSet rs = statement.executeQuery()) {
 			while (rs.next()) {
-				int id = rs.getInt("id");
 				Date createDate = rs.getDate("createDate");
 				String title = rs.getString("title");
 				String summary = rs.getString("summary");
 				String tag = rs.getString("tag");
 				String contents = rs.getString("contents");
 
-				article = new ArticleEntity(id, createDate, title, summary, tag, contents);
+				article = new ArticleEntity(searchId, createDate, title, summary, tag, contents);
 			}
 		}
 

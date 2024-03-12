@@ -1,8 +1,7 @@
-import React, { useState, useEffect, FC } from "react";
+import React, { useState, useEffect } from "react";
 
 interface Article {
     contents: string;
-    [key: string]: any;
 }
 
 export const About = () => {

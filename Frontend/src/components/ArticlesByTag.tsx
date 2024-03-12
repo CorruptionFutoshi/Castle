@@ -1,5 +1,5 @@
 import moment from "moment";
-import React, { useState, useEffect, FC } from "react";
+import { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 
 interface Article {
@@ -8,11 +8,6 @@ interface Article {
     createDate: string;
     tag: string;
     summary: string;
-    [key: string]: any;
-}
-
-interface ParamTypes {
-    tag: string;
 }
 
 export const ArticlesByTag = () => {

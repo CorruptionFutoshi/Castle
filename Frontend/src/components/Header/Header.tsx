@@ -1,29 +1,23 @@
-import React, { useState, FC, KeyboardEvent, useEffect } from 'react';
+import React, { useState, useContext, KeyboardEvent, useEffect } from 'react';
+import { LoginContext } from "../../index";
 import { Link, useNavigate } from "react-router-dom";
 import searchIcon from "../resources/serchIcon.png";
 
 export const Header = () => {
     const [showSearch, setShowSearch] = useState(false);
     const [searchText, setSearchText] = useState('');
-    const navigate = useNavigate();
-    const [hasSessionId, setHasSessionId] = useState(false);
     const [showConfirm, setShowConfirm] = useState(false);
+    const navigate = useNavigate();
+    const loginContext = useContext(LoginContext);
+    let hasSessionId: boolean = false;
+    let setHasSessionId: React.Dispatch<React.SetStateAction<boolean>>;
 
-    const toggleSearch = () => {
-        setShowSearch(!showSearch);
-    };
-
-    const handleSearch = async () => {
-        navigate(`/search/${searchText}`);
-    };
+    if (loginContext) {
+        ({ hasSessionId, setHasSessionId } = loginContext);
+    }
 
     const handleKeyPress = (e: KeyboardEvent<HTMLInputElement>) => {
-        if (e.key === 'Enter') handleSearch();
-    };
-
-    const checkSessionId = () => {
-        const sessionId = document.cookie.split('; ').find(row => row.startsWith('session'));
-        setHasSessionId(!!sessionId);
+        if (e.key === 'Enter') navigate(`/search/${searchText}`);
     };
 
     const handleSignout = async () => {
@@ -52,22 +46,10 @@ export const Header = () => {
         }
     };
 
-    const confirmCancelMember = () => {
-        setShowConfirm(true);
-    };
-
     const cancelMember = () => {
         handleCancelMember();
         setShowConfirm(false);
     };
-
-    const declineCancelMember = () => {
-        setShowConfirm(false);
-    };
-
-    useEffect(() => {
-        checkSessionId();
-    }, [document.cookie]);
 
     return (
         <div>
@@ -81,7 +63,7 @@ export const Header = () => {
                     {hasSessionId ? (
                         <>
                             <button id="signoutButton" onClick={handleSignout}>Signout</button>
-                            <button id="cancelMemberButton" onClick={confirmCancelMember}>CancelMember</button>
+                            <button id="cancelMemberButton" onClick={() => setShowConfirm(true)}>CancelMember</button>
                         </>
                     ) : (
                         <>
@@ -90,7 +72,7 @@ export const Header = () => {
                         </>
                     )}
                 </nav>
-                <button id="searchButton" onClick={toggleSearch}>
+                <button id="searchButton" onClick={() => setShowSearch(!showSearch)}>
                     <img src={searchIcon} alt="Search" className='header-search-icon' />
                 </button>
             </div>
@@ -99,7 +81,7 @@ export const Header = () => {
                 <div id="confirmDialog">
                     <p>退会しますか？</p>
                     <button onClick={cancelMember}>はい</button>
-                    <button onClick={declineCancelMember}>いいえ</button>
+                    <button onClick={() => setShowConfirm(false)}>いいえ</button>
                 </div>
             )}
 

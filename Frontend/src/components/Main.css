@@ -158,3 +158,64 @@ nav a {
 #confirmDialog{
    text-align: center;
 }
+
+.comment {
+    background-color: #f8f9fa;
+    border-radius: 5px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+}
+
+.comment p {
+    margin: 0;
+    line-height: 1.5;
+}
+
+.comment .dateAndTag {
+    color: #6c757d;
+    font-size: 0.8em;
+    margin-top: 10px;
+}
+
+.commentForm {
+    margin-top: 20px;
+}
+
+.commentTextArea {
+    width: 100%;
+    min-height: 100px;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    border: 1px solid #ced4da;
+}
+
+.submitCommentButton {
+    background-color: #00a3af;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.submitCommentButton:hover {
+    background-color: #2a83a2;
+}
+
+.replyButton {
+    background-color: #d3cbc6;
+    color: black;
+    border: none;
+    padding: 3px 6px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 10px;
+    font-size: 0.8em;
+}
+
+.replyButton:hover {
+    background-color: #c8c2be;
+}

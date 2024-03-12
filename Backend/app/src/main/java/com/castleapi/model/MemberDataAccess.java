@@ -25,10 +25,28 @@ public class MemberDataAccess {
 			while (rs.next()) {
 				int id = rs.getInt("id");
 				Date createDate = rs.getDate("createDate");
-				String usernameFromDatabase = rs.getString("username");
 				byte[] hashedPassword = rs.getBytes("hashedPassword");
 
-				member = new MemberEntity(id, createDate, usernameFromDatabase, hashedPassword);
+				member = new MemberEntity(id, createDate, username, hashedPassword);
+			}
+		}
+
+		return member;
+	}
+
+	public MemberEntity findById(int id) throws SQLException, ClassNotFoundException {
+		MemberEntity member = null;
+
+		try (Connection conn = dbConnector.connect();
+				PreparedStatement statement = createPreparedStatement(conn, "SELECT * FROM member WHERE id = ?",
+						id);
+				ResultSet rs = statement.executeQuery()) {
+			while (rs.next()) {
+				String username = rs.getString("username");
+				Date createDate = rs.getDate("createDate");
+				byte[] hashedPassword = rs.getBytes("hashedPassword");
+
+				member = new MemberEntity(id, createDate, username, hashedPassword);
 			}
 		}
 
