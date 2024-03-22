@@ -23,6 +23,8 @@ dependencies {
     implementation ("jakarta.json.bind:jakarta.json.bind-api:3.0.0")
     
     implementation ("org.eclipse:yasson:3.0.3") 
+    
+    implementation("redis.clients:jedis:5.1.0")
 }
 
 java {
