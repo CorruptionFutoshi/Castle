@@ -15,7 +15,18 @@ export const ArticlesBySearch = () => {
     const { searchText } = useParams<{ searchText: string }>();
 
     useEffect(() => {
-        fetch(`http://localhost:8080/app/article/search/${searchText}`, { method: "GET" })
+        let encodedSearchText = "";
+
+        if (searchText) {
+            encodedSearchText = encodeURIComponent(searchText);
+        }
+
+        fetch(`https://api.catsle.net/app/article/search/${encodedSearchText}`, {
+            method: "GET",
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+            },
+        })
             .then((res) => res.json())
             .then((articles: Article[]) => setArticles(articles.filter(article => article.id !== 1).reverse()))
             .catch((error) => console.error('Error:', error)
@@ -28,7 +39,7 @@ export const ArticlesBySearch = () => {
                 <ul key={index} className="homeArticle">
                     <div className="titleLink"><Link to={`/articles/${article.id}`}>{article.title}</Link></div>
                     <p>{article.summary}</p>
-                    <div className="dateAndTag">{moment(article.createDate).format('YYYY/MM/DD')}　</div>
+                    <div className="dateAndTag">{moment(new Date(article.createDate).toISOString()).format('YYYY/MM/DD')}　</div>
                     <div className="dateAndTag"><Link to={`/tags/${article.tag}`}>{article.tag}</Link></div>
                 </ul>
             ))}

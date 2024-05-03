@@ -12,6 +12,18 @@ export const Header = () => {
     let hasSessionId: boolean = false;
     let setHasSessionId: React.Dispatch<React.SetStateAction<boolean>>;
 
+    useEffect(() => {
+        fetch("https://api.catsle.net/app/member/issignin", {
+          method: "GET",
+          headers: {
+            'X-Requested-With': 'XMLHttpRequest',
+          },
+          credentials: 'include',
+        })
+          .then(response => response.json())
+          .then(data => {setHasSessionId(data.isSignin);});
+      }, []);
+
     if (loginContext) {
         ({ hasSessionId, setHasSessionId } = loginContext);
     }
@@ -21,28 +33,32 @@ export const Header = () => {
     };
 
     const handleSignout = async () => {
-        const response = await fetch('http://localhost:8080/app/member/signout/', { method: 'DELETE', credentials: 'include' });
+        const response = await fetch('https://api.catsle.net/app/member/signout/', {
+            method: 'DELETE',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+            },
+            credentials: 'include'
+        });
 
         if (response.ok) {
-            const disposeCookieResponse = await fetch('http://localhost:8080/app/member/signout/disposecookie', { method: 'GET', credentials: 'include' });
-
-            if (disposeCookieResponse.ok) {
-                alert('ログアウトしました');
-                setHasSessionId(false);
-            }
+            alert('ログアウトしました');
+            setHasSessionId(false);
         }
     };
 
     const handleCancelMember = async () => {
-        const response = await fetch('http://localhost:8080/app/member/cancelmember/', { method: 'DELETE', credentials: 'include' });
+        const response = await fetch('https://api.catsle.net/app/member/cancelmember/', {
+            method: 'DELETE',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+            },
+            credentials: 'include'
+        });
 
         if (response.ok) {
-            const disposeCookieResponse = await fetch('http://localhost:8080/app/member/signout/disposecookie', { method: 'GET', credentials: 'include' });
-
-            if (disposeCookieResponse.ok) {
-                alert('退会しました');
-                setHasSessionId(false);
-            }
+            alert('退会しました');
+            setHasSessionId(false);
         }
     };
 
@@ -55,7 +71,7 @@ export const Header = () => {
         <div>
             <div id="header">
                 <div className='blogTitle'>
-                    <Link to={`/`}>未定</Link>
+                    <Link to={`/`}>Catsle</Link>
                 </div>
                 <nav>
                     <Link to={`/about`}>About</Link>

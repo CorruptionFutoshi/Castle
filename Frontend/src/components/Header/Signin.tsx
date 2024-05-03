@@ -16,10 +16,11 @@ export const Signin = () => {
 
     const handleLogin = async () => {
         try {
-            const response = await fetch('http://localhost:8080/app/member/signin/', {
+            const response = await fetch('https://api.catsle.net/app/member/signin/', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'X-Requested-With':'XMLHttpRequest'
                 },
                 body: JSON.stringify({
                     username,

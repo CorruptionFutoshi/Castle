@@ -29,7 +29,19 @@ export const Article = () => {
     }
 
     useEffect(() => {
-        fetch(`http://localhost:8080/app/article/articles/${id}`, { method: "GET" })
+        if (id) {
+            if (!/^\d+$/.test(id)) {
+                console.error('Invalid ID:', id);
+                return;
+            }
+        }
+
+        fetch(`https://api.catsle.net/app/article/articles/${id}`, {
+            method: "GET",
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+            },
+        })
             .then((res) => res.json())
             .then((article: Article) => {
                 article.contents = article.contents.replace(/\\n/g, '<br />');
@@ -38,7 +50,12 @@ export const Article = () => {
             .catch((error) => console.error('Error:', error)
             );
 
-        fetch(`http://localhost:8080/app/comment/${id}`, { method: "GET" })
+        fetch(`https://api.catsle.net/app/comment/${id}`, {
+            method: "GET",
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+            },
+        })
             .then((res) => res.json())
             .then((comments: Comment[]) => {
                 comments.map((comment) => comment.contents = comment.contents.replace(/\\n/g, '<br />'));
@@ -49,10 +66,18 @@ export const Article = () => {
     }, [id]);
 
     const createComment = () => {
-        fetch(`http://localhost:8080/app/comment/${id}`, {
+        if (id) {
+            if (!/^\d+$/.test(id)) {
+                console.error('Invalid ID:', id);
+                return;
+            }
+        }
+
+        fetch(`https://api.catsle.net/app/comment/${id}`, {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest',
             },
             body: JSON.stringify({ contents: newComment }),
             credentials: 'include'
@@ -69,17 +94,25 @@ export const Article = () => {
         <div className="container">
             <ul>
                 <br /><br />
-                <h2>{article?.title}</h2>
-                <div className="dateAndTagArticle">{moment(article?.createDate).format('YYYY/MM/DD')}</div>
-                <div className="dateAndTagArticle"><Link to={`/tags/${article?.tag}`}>{article?.tag}</Link></div>
-                <p dangerouslySetInnerHTML={{ __html: article?.contents || "" }}></p>
+                {article && (
+                    <>
+                        <h2>{article.title}</h2>
+                        <div className="dateAndTagArticle">{moment(new Date(article.createDate).toISOString()).format('YYYY/MM/DD')}</div>
+                        <div className="dateAndTagArticle"><Link to={`/tags/${article.tag}`}>{article.tag}</Link></div>
+                        {article.contents.split('\n').map((line, i) => (
+                            <p key={i}>{line}</p>
+                        ))}
+                    </>
+                )}
             </ul><br /><br />
             <h3>コメント</h3>
             {comments.map((comment, index) => (
                 <ul key={index} className="comment">
                     <p>{index + 1} {comment.username}</p>
-                    <p>{comment.contents}</p>
-                    <div className="dateAndTag">{moment(comment.createDate).format('YYYY/MM/DD')}　</div>
+                    {comment.contents.split('\n').map((line, i) => (
+                        <p key={i}>{line}</p>
+                    ))}
+                    <div className="dateAndTag">{moment(new Date(comment.createDate).toISOString()).format('YYYY/MM/DD')}　</div>
                     {hasSessionId &&
                         <button className="replyButton" onClick={() => { setNewComment(">>" + (index + 1) + "\n" + newComment) }}>返信</button>
                     }

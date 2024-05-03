@@ -5,7 +5,12 @@ export const Tags = () => {
   const [tags, setTags] = useState<string[]>([]);
 
   useEffect(() => {
-    fetch("http://localhost:8080/app/article/tags/", { method: "GET" })
+    fetch("https://api.catsle.net/app/article/tags/", {
+      method: "GET",
+      headers: {
+        'X-Requested-With': 'XMLHttpRequest',
+      },
+    })
       .then((res) => res.json())
       .then((tags: string[]) => setTags(tags.filter(tag => tag !== "ブログ")))
       .catch((error) => console.error('Error:', error)

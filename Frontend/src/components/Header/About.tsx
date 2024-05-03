@@ -8,7 +8,12 @@ export const About = () => {
     const [article, setArticle] = useState<Article | null>(null);
 
     useEffect(() => {
-        fetch(`http://localhost:8080/app/article/articles/1`, { method: "GET" })
+        fetch(`https://api.catsle.net/app/article/articles/8`, {
+            method: "GET",
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+            },
+        })
             .then((res) => res.json())
             .then((article: Article) => {
                 article.contents = article.contents.replace(/\\n/g, '<br />');
@@ -22,7 +27,10 @@ export const About = () => {
         <div className="container">
             <ul>
                 <br /><br />
-                <p dangerouslySetInnerHTML={{ __html: article?.contents || "" }}></p>
+                <br /><br />
+                {article?.contents.split('\n').map((line, i) => (
+                    <p key={i}>{line}</p>
+                ))}
                 <p className="date">2024/01/28</p>
             </ul>
         </div>
