@@ -82,4 +82,12 @@ public class ArticleDataAccess {
 
 		return statement;
 	}
+
+	public void dispose() {
+		try {
+			dbConnector.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 }

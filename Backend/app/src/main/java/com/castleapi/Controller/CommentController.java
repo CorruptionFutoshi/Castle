@@ -26,75 +26,108 @@ import redis.clients.jedis.JedisPool;
 public class CommentController extends HttpServlet {
 	CommentDataAccess commentDataAccess;
 
-	public CommentController() {
-		try {
-			commentDataAccess = new CommentDataAccess();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse res) {
-		String path = req.getRequestURI().substring("/app/comment/".length());
-
-		int articleId = -1;
-		List<CommentEntity> comments = new ArrayList<CommentEntity>();
+		res.setContentType("application/json");
 
 		try {
-			articleId = Integer.parseInt(path.replace("/", ""));
-		} catch (NumberFormatException e) {
-			e.printStackTrace();
-		}
+			commentDataAccess = new CommentDataAccess();
+			String path = req.getRequestURI().substring("/app/comment/".length());
 
-		try {
-			comments = commentDataAccess.findByArticleId(articleId);
-			String json = ObjectToJsonConverter.toJson(comments);
-			res.getWriter().write(json);
-		} catch (SQLException | ClassNotFoundException | IOException e) {
+			int articleId = -1;
+			List<CommentEntity> comments = new ArrayList<CommentEntity>();
+
+			try {
+				articleId = Integer.parseInt(path.replace("/", ""));
+			} catch (NumberFormatException e) {
+				e.printStackTrace();
+			}
+
+			try {
+				comments = commentDataAccess.findByArticleId(articleId);
+				String json = ObjectToJsonConverter.toJson(comments);
+				res.getWriter().write(json);
+			} catch (SQLException | ClassNotFoundException | IOException e) {
+				e.printStackTrace();
+			}
+		} catch (IOException e) {
 			e.printStackTrace();
+			return;
+		} finally {
+			commentDataAccess.dispose();
 		}
 	}
 
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse res) {
-		String path = req.getRequestURI().substring("/app/comment/".length());
-		int articleId = -1;
-		String username = null;
-		String contents = null;
+		res.setContentType("application/json");
 
-		Cookie[] cookies = req.getCookies();
-		String sessionId = null;
+		if (req.getContentType() == null || !req.getContentType().equals("application/json")) {
+			res.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 
-		if (cookies != null) {
-			for (Cookie cookie : cookies) {
-				if (cookie.getName().equals("session")) {
-					sessionId = cookie.getValue();
-					break;
+			try {
+				res.getWriter().write("{\"message\": \"Request Invalid\"}");
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
+			return;
+		}
+
+		try {
+			commentDataAccess = new CommentDataAccess();
+			String path = req.getRequestURI().substring("/app/comment/".length());
+			int articleId = -1;
+			String username = null;
+			String contents = null;
+
+			Cookie[] cookies = req.getCookies();
+			String sessionId = null;
+
+			if (cookies != null) {
+				for (Cookie cookie : cookies) {
+					if (cookie.getName().equals("session")) {
+						sessionId = cookie.getValue();
+						break;
+					}
 				}
 			}
-		}
 
-		try {
-			articleId = Integer.parseInt(path.replace("/", ""));
-			JsonObject jsonObject = createJsonObject(req);
+			try {
+				articleId = Integer.parseInt(path.replace("/", ""));
+				JsonObject jsonObject = createJsonObject(req);
 
-			try (JedisPool pool = new JedisPool("localhost", 6379);
-					Jedis jedis = pool.getResource()) {
-				username = jedis.get(sessionId);
+				try (JedisPool pool = new JedisPool("localhost", 6379);
+						Jedis jedis = pool.getResource()) {
+					username = jedis.get(sessionId);
+
+					if (username == null) {
+						try {
+							res.getWriter().write("{\"message\":\"Not signed in\"}");
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+						return;
+					}
+				}
+
+				contents = jsonObject.getString("contents");
+			} catch (IOException | NumberFormatException e) {
+				e.printStackTrace();
 			}
 
-			contents = jsonObject.getString("contents");
-		} catch (IOException | NumberFormatException e) {
+			try {
+				commentDataAccess.insert(articleId, username, contents);
+				String json = ObjectToJsonConverter.toJson(commentDataAccess.findByArticleId(articleId));
+				res.getWriter().write(json);
+			} catch (ClassNotFoundException | SQLException | IOException e) {
+				e.printStackTrace();
+			}
+		} catch (IOException e) {
 			e.printStackTrace();
-		}
-
-		try {
-			commentDataAccess.insert(articleId, username, contents);
-			String json = ObjectToJsonConverter.toJson(commentDataAccess.findByArticleId(articleId));
-			res.getWriter().write(json);
-		} catch (ClassNotFoundException | SQLException | IOException e) {
-			e.printStackTrace();
+			return;
+		} finally {
+			commentDataAccess.dispose();
 		}
 	}
 

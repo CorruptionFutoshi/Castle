@@ -21,24 +21,25 @@ import jakarta.servlet.http.HttpServletResponse;
 public class ArticleController extends HttpServlet {
 	ArticleDataAccess articleDataAccess;
 
-	public ArticleController() {
-		try {
-			articleDataAccess = new ArticleDataAccess();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse res) {
-		String path = req.getRequestURI().substring("/app/article/".length());
+		try {
+			articleDataAccess = new ArticleDataAccess();
 
-		if (path.startsWith("articles/")) {
-			handleArticlesRequest(req, res, path.substring("articles/".length()));
-		} else if (path.equals("tags/")) {
-			handleTagsRequest(req, res);
-		} else if (path.startsWith("search/")) {
-			handleSearchRequest(req, res, path.substring("search/".length()));
+			String path = req.getRequestURI().substring("/app/article/".length());
+
+			if (path.startsWith("articles/")) {
+				handleArticlesRequest(req, res, path.substring("articles/".length()));
+			} else if (path.equals("tags/")) {
+				handleTagsRequest(req, res);
+			} else if (path.startsWith("search/")) {
+				handleSearchRequest(req, res, path.substring("search/".length()));
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+			return;
+		} finally {
+			articleDataAccess.dispose();
 		}
 	}
 
@@ -46,6 +47,7 @@ public class ArticleController extends HttpServlet {
 		int id = -1;
 		String tag = null;
 		Object foundArticle;
+		res.setContentType("application/json");
 
 		try {
 			id = Integer.parseInt(idOrTag.replace("/", ""));
@@ -75,6 +77,8 @@ public class ArticleController extends HttpServlet {
 	}
 
 	private void handleTagsRequest(HttpServletRequest req, HttpServletResponse res) {
+		res.setContentType("application/json");
+
 		try {
 			List<ArticleLightEntity> articles = articleDataAccess.findAll();
 			Set<String> uniqueTags = new HashSet<>();
@@ -95,6 +99,7 @@ public class ArticleController extends HttpServlet {
 			var plainKeyword = java.net.URLDecoder.decode(keyword, StandardCharsets.UTF_8.name());
 			List<ArticleLightEntity> articles = articleDataAccess.findByKeyword(plainKeyword.replace("/", ""));
 			String json = ObjectToJsonConverter.toJson(articles);
+			res.setContentType("application/json");
 			res.getWriter().write(json);
 		} catch (SQLException | IOException | ClassNotFoundException e) {
 			e.printStackTrace();

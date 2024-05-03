@@ -11,6 +11,7 @@ public class DatabaseConnector {
 	private String url;
 	private String user;
 	private String password;
+	private Connection connection;
 
 	public DatabaseConnector() throws IOException {
 		Properties properties = new Properties();
@@ -28,7 +29,17 @@ public class DatabaseConnector {
 	}
 
 	public Connection connect() throws SQLException, ClassNotFoundException {
-		Class.forName("org.mariadb.jdbc.Driver");
-		return DriverManager.getConnection(url, user, password);
+		if (connection == null || connection.isClosed()) {
+			Class.forName("org.mariadb.jdbc.Driver");
+			connection = DriverManager.getConnection(url, user, password);
+		}
+		
+		return connection;
+	}
+
+	public void close() throws SQLException {
+		if (connection != null && !connection.isClosed()) {
+			connection.close();
+		}
 	}
 }

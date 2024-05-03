@@ -80,4 +80,12 @@ public class MemberDataAccess {
 
 		return statement;
 	}
+
+	public void dispose() {
+		try {
+			dbConnector.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 }
