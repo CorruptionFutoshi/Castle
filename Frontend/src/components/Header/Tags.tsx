@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { API_URL } from '../../config';
 
 export const Tags = () => {
   const [tags, setTags] = useState<string[]>([]);
 
   useEffect(() => {
-    fetch("https://api.catsle.net/app/article/tags/", {
+    fetch(`${API_URL}/app/article/tags/`, {
       method: "GET",
       headers: {
         'X-Requested-With': 'XMLHttpRequest',

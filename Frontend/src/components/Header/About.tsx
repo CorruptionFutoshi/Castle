@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { API_URL } from '../../config';
 
 interface Article {
     contents: string;
@@ -8,7 +9,7 @@ export const About = () => {
     const [article, setArticle] = useState<Article | null>(null);
 
     useEffect(() => {
-        fetch(`https://api.catsle.net/app/article/articles/8`, {
+        fetch(`${API_URL}/app/article/articles/1`, {
             method: "GET",
             headers: {
                 'X-Requested-With': 'XMLHttpRequest',

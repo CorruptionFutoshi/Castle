@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { API_URL } from '../../config';
 
 export const Signup = () => {
     const [username, setUsername] = useState('');
@@ -9,11 +10,11 @@ export const Signup = () => {
 
     const handleLogin = async () => {
         try {
-            const response = await fetch('https://api.catsle.net/app/member/signup/', {
+            const response = await fetch(`${API_URL}/app/member/signup/`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'X-Requested-With':'XMLHttpRequest'
+                    'X-Requested-With': 'XMLHttpRequest'
                 },
                 body: JSON.stringify({
                     username,
@@ -51,6 +52,7 @@ export const Signup = () => {
             />
             <button id="signinup-button" onClick={handleLogin}>Signup</button>
             {error && <p id="signinup-error">{error}</p>}
+            申し訳ありませんが、外部サービスで使用している認証情報を流用しないでください。このブログは初学者が作成・運用しているため流出の可能性があります。
         </div>
     );
 };

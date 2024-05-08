@@ -2,6 +2,7 @@ import React, { useState, useContext, KeyboardEvent, useEffect } from 'react';
 import { LoginContext } from "../../index";
 import { Link, useNavigate } from "react-router-dom";
 import searchIcon from "../resources/serchIcon.png";
+import { API_URL } from '../../config';
 
 export const Header = () => {
     const [showSearch, setShowSearch] = useState(false);
@@ -13,16 +14,16 @@ export const Header = () => {
     let setHasSessionId: React.Dispatch<React.SetStateAction<boolean>>;
 
     useEffect(() => {
-        fetch("https://api.catsle.net/app/member/issignin", {
-          method: "GET",
-          headers: {
-            'X-Requested-With': 'XMLHttpRequest',
-          },
-          credentials: 'include',
+        fetch(`${API_URL}/app/member/issignin`, {
+            method: "GET",
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+            },
+            credentials: 'include',
         })
-          .then(response => response.json())
-          .then(data => {setHasSessionId(data.isSignin);});
-      }, []);
+            .then(response => response.json())
+            .then(data => { setHasSessionId(data.isSignin); });
+    }, []);
 
     if (loginContext) {
         ({ hasSessionId, setHasSessionId } = loginContext);
@@ -33,7 +34,7 @@ export const Header = () => {
     };
 
     const handleSignout = async () => {
-        const response = await fetch('https://api.catsle.net/app/member/signout/', {
+        const response = await fetch(`${API_URL}/app/member/signout/`, {
             method: 'DELETE',
             headers: {
                 'X-Requested-With': 'XMLHttpRequest',
@@ -48,7 +49,7 @@ export const Header = () => {
     };
 
     const handleCancelMember = async () => {
-        const response = await fetch('https://api.catsle.net/app/member/cancelmember/', {
+        const response = await fetch(`${API_URL}/app/member/cancelmember/`, {
             method: 'DELETE',
             headers: {
                 'X-Requested-With': 'XMLHttpRequest',
@@ -71,7 +72,7 @@ export const Header = () => {
         <div>
             <div id="header">
                 <div className='blogTitle'>
-                    <Link to={`/`}>Catsle</Link>
+                    <Link to={`/`}>Catsle{process.env.BLOG_TITLE}</Link>
                 </div>
                 <nav>
                     <Link to={`/about`}>About</Link>

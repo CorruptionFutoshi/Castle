@@ -2,6 +2,7 @@ import moment from "moment";
 import { useState, useEffect, useContext } from "react";
 import { Link, useParams } from "react-router-dom";
 import { LoginContext } from "../index";
+import { API_URL } from '../config';
 
 interface Article {
     title: string;
@@ -36,7 +37,7 @@ export const Article = () => {
             }
         }
 
-        fetch(`https://api.catsle.net/app/article/articles/${id}`, {
+        fetch(`${API_URL}/app/article/articles/${id}`, {
             method: "GET",
             headers: {
                 'X-Requested-With': 'XMLHttpRequest',
@@ -50,7 +51,7 @@ export const Article = () => {
             .catch((error) => console.error('Error:', error)
             );
 
-        fetch(`https://api.catsle.net/app/comment/${id}`, {
+        fetch(`${API_URL}/app/comment/${id}`, {
             method: "GET",
             headers: {
                 'X-Requested-With': 'XMLHttpRequest',
@@ -73,7 +74,7 @@ export const Article = () => {
             }
         }
 
-        fetch(`https://api.catsle.net/app/comment/${id}`, {
+        fetch(`${API_URL}/app/comment/${id}`, {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',

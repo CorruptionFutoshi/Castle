@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import moment from 'moment';
 import './Main.css';
+import { API_URL } from '../config';
 
 interface Article {
   id: number;
@@ -15,7 +16,7 @@ export const App = () => {
   const [articles, setArticles] = useState<Article[]>([]);
 
   useEffect(() => {
-    fetch("https://api.catsle.net/app/article/articles/", {
+    fetch(`${API_URL}/app/article/articles/`, {
       method: "GET",
       headers: {
         'X-Requested-With': 'XMLHttpRequest',

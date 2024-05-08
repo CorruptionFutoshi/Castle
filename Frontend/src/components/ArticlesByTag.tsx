@@ -1,6 +1,7 @@
 import moment from "moment";
 import { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
+import { API_URL } from '../config';
 
 interface Article {
     id: number;
@@ -21,7 +22,7 @@ export const ArticlesByTag = () => {
             encodedTag = encodeURIComponent(tag);
         }
 
-        fetch(`https://api.catsle.net/app/article/articles/${encodedTag}`, {
+        fetch(`${API_URL}/app/article/articles/${encodedTag}`, {
             method: "GET",
             headers: {
                 'X-Requested-With': 'XMLHttpRequest',

@@ -1,6 +1,7 @@
 import moment from "moment";
 import { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
+import { API_URL } from '../config';
 
 interface Article {
     id: number;
@@ -21,7 +22,7 @@ export const ArticlesBySearch = () => {
             encodedSearchText = encodeURIComponent(searchText);
         }
 
-        fetch(`https://api.catsle.net/app/article/search/${encodedSearchText}`, {
+        fetch(`${API_URL}/app/article/search/${encodedSearchText}`, {
             method: "GET",
             headers: {
                 'X-Requested-With': 'XMLHttpRequest',

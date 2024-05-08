@@ -1,6 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { LoginContext } from "../../index";
+import { API_URL } from '../../config';
 
 export const Signin = () => {
     const [username, setUsername] = useState('');
@@ -16,11 +17,11 @@ export const Signin = () => {
 
     const handleLogin = async () => {
         try {
-            const response = await fetch('https://api.catsle.net/app/member/signin/', {
+            const response = await fetch(`${API_URL}/app/member/signin/`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'X-Requested-With':'XMLHttpRequest'
+                    'X-Requested-With': 'XMLHttpRequest'
                 },
                 body: JSON.stringify({
                     username,
