@@ -155,7 +155,7 @@ public class MemberController extends HttpServlet {
 			Cookie sessionCookie = new Cookie("session", sessionId);
 			sessionCookie.setMaxAge(60 * 60);
 			sessionCookie.setPath("/");
-			sessionCookie.setSecure(false);
+			sessionCookie.setSecure(true);
 			sessionCookie.setAttribute("SameSite", "Lax");
 			sessionCookie.setHttpOnly(true);
 			res.addCookie(sessionCookie);
@@ -223,7 +223,7 @@ public class MemberController extends HttpServlet {
 		Cookie sessionCookie = new Cookie("session", "");
 		sessionCookie.setMaxAge(0);
 		sessionCookie.setPath("/");
-		sessionCookie.setSecure(false);
+		sessionCookie.setSecure(true);
 		sessionCookie.setAttribute("SameSite", "Lax");
 		sessionCookie.setHttpOnly(true);
 		res.addCookie(sessionCookie);
@@ -318,7 +318,7 @@ public class MemberController extends HttpServlet {
 			Cookie sessionCookie = new Cookie("session", "");
 			sessionCookie.setMaxAge(0);
 			sessionCookie.setPath("/");
-			sessionCookie.setSecure(false);
+			sessionCookie.setSecure(true);
 			sessionCookie.setAttribute("SameSite", "Lax");
 			sessionCookie.setHttpOnly(true);
 			res.addCookie(sessionCookie);
