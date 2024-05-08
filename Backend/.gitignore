@@ -13,3 +13,4 @@ app/.settings/
 
 # 環境変数
 database.properties
+application.properties
