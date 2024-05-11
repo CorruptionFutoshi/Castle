@@ -8,11 +8,11 @@ repositories {
 }
 
 dependencies {
-    testImplementation(libs.junit.jupiter)
+    testImplementation("org.junit.jupiter:junit-jupiter:5.10.0")
 
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 
-    implementation(libs.guava)
+    implementation("com.google.guava:guava:32.1.3-jre")
     
     implementation ("org.mariadb.jdbc:mariadb-java-client:3.3.2")
     
