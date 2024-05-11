@@ -1,7 +1,7 @@
 import React, { useState, useContext, KeyboardEvent, useEffect } from 'react';
 import { LoginContext } from "../../index";
 import { Link, useNavigate } from "react-router-dom";
-import searchIcon from "../resources/serchIcon.png";
+import searchIcon from "../resources/searchIcon.png";
 import { API_URL } from '../../config';
 
 export const Header = () => {
@@ -12,6 +12,10 @@ export const Header = () => {
     const loginContext = useContext(LoginContext);
     let hasSessionId: boolean = false;
     let setHasSessionId: React.Dispatch<React.SetStateAction<boolean>>;
+
+    if (loginContext) {
+        ({ hasSessionId, setHasSessionId } = loginContext);
+    }
 
     useEffect(() => {
         fetch(`${API_URL}/app/member/issignin`, {
@@ -25,11 +29,7 @@ export const Header = () => {
             .then(data => { setHasSessionId(data.isSignin); });
     }, []);
 
-    if (loginContext) {
-        ({ hasSessionId, setHasSessionId } = loginContext);
-    }
-
-    const handleKeyPress = (e: KeyboardEvent<HTMLInputElement>) => {
+    const SearchKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
         if (e.key === 'Enter') navigate(`/search/${searchText}`);
     };
 
@@ -104,7 +104,7 @@ export const Header = () => {
 
             {showSearch && (
                 <div id="searchBar">
-                    <input type="text" onChange={e => setSearchText(e.target.value)} onKeyPress={handleKeyPress} />
+                    <input type="text" onChange={e => setSearchText(e.target.value)} onKeyDown={SearchKeyDown} />
                 </div>
             )}
             <hr />

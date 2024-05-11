@@ -13,7 +13,7 @@ export const Tags = () => {
       },
     })
       .then((res) => res.json())
-      .then((tags: string[]) => setTags(tags.filter(tag => tag !== "ブログ")))
+      .then((tags: string[]) => setTags(tags))
       .catch((error) => console.error('Error:', error)
       );
   }, []);

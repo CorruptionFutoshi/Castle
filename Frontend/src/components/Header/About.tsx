@@ -17,7 +17,6 @@ export const About = () => {
         })
             .then((res) => res.json())
             .then((article: Article) => {
-                article.contents = article.contents.replace(/\\n/g, '<br />');
                 setArticle(article);
             })
             .catch((error) => console.error('Error:', error)
@@ -32,7 +31,8 @@ export const About = () => {
                 {article?.contents.split('\n').map((line, i) => (
                     <p key={i}>{line}</p>
                 ))}
-                <p className="date">2024/01/28</p>
+                <br />
+                <p className="date">2024/05/10</p>
             </ul>
         </div>
     );

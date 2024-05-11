@@ -45,7 +45,6 @@ export const Article = () => {
         })
             .then((res) => res.json())
             .then((article: Article) => {
-                article.contents = article.contents.replace(/\\n/g, '<br />');
                 setArticle(article);
             })
             .catch((error) => console.error('Error:', error)
@@ -59,7 +58,6 @@ export const Article = () => {
         })
             .then((res) => res.json())
             .then((comments: Comment[]) => {
-                comments.map((comment) => comment.contents = comment.contents.replace(/\\n/g, '<br />'));
                 setComments(comments);
             })
             .catch((error) => console.error('Error:', error)
