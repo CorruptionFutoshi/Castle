@@ -32,7 +32,7 @@ export const About = () => {
                     <p key={i}>{line}</p>
                 ))}
                 <br />
-                <p className="date">2024/05/10</p>
+                <p className="date">2024/05/20</p>
             </ul>
         </div>
     );
