@@ -3,6 +3,7 @@ import { useState, useEffect, useContext } from "react";
 import { Link, useParams } from "react-router-dom";
 import { LoginContext } from "../index";
 import { API_URL } from '../config';
+import ReactMarkdown from "react-markdown";
 
 interface Article {
     title: string;
@@ -95,12 +96,10 @@ export const Article = () => {
                 <br /><br />
                 {article && (
                     <>
-                        <h2>{article.title}</h2>
+                        <h2 className="title">{article.title}</h2>
                         <div className="dateAndTagArticle">{moment(new Date(article.createDate).toISOString()).format('YYYY/MM/DD')}</div>
                         <div className="dateAndTagArticle"><Link to={`/tags/${article.tag}`}>{article.tag}</Link></div>
-                        {article.contents.split('\n').map((line, i) => (
-                            <p key={i}>{line}</p>
-                        ))}
+                        <ReactMarkdown>{article.contents}</ReactMarkdown>
                     </>
                 )}
             </ul><br /><br />
